@@ -1,0 +1,18 @@
+{
+  "plugins": [
+    "react-hooks"
+  ],
+  "extends": [
+    "next/core-web-vitals", 
+    "next/typescript",
+    "plugin:react-hooks/recommended"
+  ],
+  
+  "rules": { 
+    "react/no-unescaped-entities": 0,
+    "@next/next/no-page-custom-font": "off",
+    "react-hooks/rules-of-hooks": "error",
+    "react-hooks/exhaustive-deps": "warn"
+    
+  } 
+}
