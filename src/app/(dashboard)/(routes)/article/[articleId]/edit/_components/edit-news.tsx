@@ -227,9 +227,8 @@ export default function EditNews({ userId, article }: editNewsProps) {
       toast.success('Successfully Edit News Article', {
         id: toastId,
       });
-      setIsLoading(false);
-
       router.push(`/article/${article._id}`)
+      setIsLoading(false);
     } catch (err) {
       setIsLoading(false);
       console.error('Error posting news:', err);
@@ -404,7 +403,7 @@ export default function EditNews({ userId, article }: editNewsProps) {
               {isLoading ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Submiting
+                  Editing
                 </>
               ) : 'Update'}
             </Button>

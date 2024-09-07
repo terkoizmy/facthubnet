@@ -65,7 +65,7 @@ export default function SummarySection({ article } : ArticleSectionProps) {
                 </>
               ) : 'Generate Summary'}
             </Button>
-            {isLoading && timer >= 240 && (
+            {isLoading && timer >= 30 && (
               <p className="text-yellow-500 mt-2">
                 This is taking longer than usual. Please be patient...
               </p>

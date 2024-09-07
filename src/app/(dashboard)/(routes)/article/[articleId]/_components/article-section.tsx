@@ -44,11 +44,9 @@ export default function ArticleSection( { article } : ArticleSectionProps)  {
   const isBookmarked = useQuery(api.bookmarks.isBookmarked, { articleId: article._id });
   const toggleFollow = useMutation(api.follow.toogleFollow);
   const isFollowed = useQuery(api.follow.isFollowed, { userId: article.author._id });
-  const [optimisticUpvotes, setOptimisticUpvotes] = useState(0);
-  const [optimisticDownvotes, setOptimisticDownvotes] = useState(0);
+  const [optimisticUpvotes, setOptimisticUpvotes] = useState(article.upvotes || 0);
+  const [optimisticDownvotes, setOptimisticDownvotes] = useState(article.downvotes || 0);
   const [optimisticBookmark, setOptimisticBookmark] = useState(false);
-  const [optimisticFollow, setOptimisticFollow] = useState(false);
-  
 
   const handleUpvote = async (articleId: any) => {
     setOptimisticUpvotes(prev => prev + 1);
@@ -117,11 +115,11 @@ export default function ArticleSection( { article } : ArticleSectionProps)  {
         <div className="flex ml-4 items-center text-zinc-400 w-full mt-2">
           <Button variant="ghost" size="sm" onClick={() => {handleUpvote(article._id)}}>
             <ThumbsUp className="mr-2 h-4 w-4" />
-            {article.upvotes}
+            {optimisticUpvotes}
           </Button>
           <Button variant="ghost" size="sm" onClick={() => {handleDownvote(article._id)}}>
             <ThumbsDown className="mr-2 h-4 w-4" />
-            {article.downvotes}
+            {optimisticDownvotes}
           </Button>
           <Button 
             variant={optimisticBookmark ? "secondary" : "ghost"} 

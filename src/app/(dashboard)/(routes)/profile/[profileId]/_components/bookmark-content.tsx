@@ -6,6 +6,7 @@ import { usePaginatedQuery } from "convex/react";
 import { api } from "@/../convex/_generated/api";
 import { Doc } from "@/../convex/_generated/dataModel";
 import { ArticlePost } from "./article-post";
+import { Skeleton } from "@/components/ui/skeleton";
 
 
 interface Author extends Doc<"users"> {

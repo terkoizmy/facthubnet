@@ -56,7 +56,7 @@ const ACCEPTED_IMAGE_TYPES = [
 ]
 
 const formSchema = z.object({
-  title: z.string().min(1, "Title is required").max(100, "Title is too long"),
+  title: z.string().min(1, "Title is required").max(70, "Title is too long"),
   content: z.object({
     text: z.string().min(1, "Content is required"),
     html: z.string(),
@@ -186,8 +186,8 @@ export default function CreateNews({ userId }: any) {
       toast.success("Successfully Created News Article", {
         id: toastId,
       })
-      setIsLoading(false);
       router.push(`/article/${newArticle}`)
+      setIsLoading(false);
 
       // Reset form or navigate to another page
     } catch (err) {
@@ -375,7 +375,7 @@ export default function CreateNews({ userId }: any) {
             {isLoading ? (
               <>
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                Submiting
+                Posting
               </>
             ) : 'Post'}
           </Button>

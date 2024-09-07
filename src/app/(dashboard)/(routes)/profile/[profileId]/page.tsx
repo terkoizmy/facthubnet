@@ -22,7 +22,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
-
+import { Skeleton } from "@/components/ui/skeleton";
 import {  useParams } from 'next/navigation';
 import { useState } from "react";
 import { Id } from "@/../convex/_generated/dataModel";
@@ -94,7 +94,15 @@ export default function ProfilePage () {
             Profile
           </div>
           <div className="border-t-2 w-full " />
-          {!userProfile ? <div>Loading...</div> :
+          {!userProfile ? 
+          <div className="flex items-center space-x-4">
+            <Skeleton className="h-20 w-20 rounded-full" />
+            <div className="space-y-2">
+              <Skeleton className="h-4 w-[250px]" />
+              <Skeleton className="h-4 w-[200px]" />
+            </div>
+          </div>
+          :
           <div className="w-full p-3 flex flex-col ">
           {/* <Card className="w-full p-3 flex flex-col " > */}
             <div className="flex flex-row">

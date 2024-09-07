@@ -66,4 +66,10 @@ export default defineSchema({
     articleId: v.id("newsArticles"),
     createdAt: v.number(),
   }).index('userId', ['userId']),
+  userInteractions: defineTable({
+    userId: v.id("users"),
+    articleId: v.id("newsArticles"),
+    interactionType: v.string(), // e.g., "view", "like", "comment"
+    timestamp: v.number(),
+  }).index("by_user", ["userId"]),
 });

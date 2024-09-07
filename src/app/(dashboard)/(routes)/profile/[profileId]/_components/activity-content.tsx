@@ -2,7 +2,7 @@
 
 import React from 'react'
 import { Id } from "@/../convex/_generated/dataModel";
-import { usePaginatedQuery, useQuery } from "convex/react"
+import { useQuery } from "convex/react"
 import { api } from "@/../convex/_generated/api"
 import { useState, useEffect, useCallback } from "react"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -10,6 +10,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { formatDistanceToNow } from 'date-fns';
 import { MessageSquare, ThumbsUp, ThumbsDown } from 'lucide-react';
+import { Skeleton } from '@/components/ui/skeleton';
 
 interface ActivityProps{
   profileId: Id<"users">
@@ -20,7 +21,11 @@ export default function ActivityContent({ profileId }: ActivityProps) {
   const activities = useQuery(api.profile.getRecentActivities, { limit: limit, profileId});
 
   if (!activities) {
-    return <div>Loading...</div>;
+    return <div className="flex flex-col space-y-3">
+    <Skeleton className="h-[90px] w-full rounded-xl" />
+    <Skeleton className="h-[90px] w-full rounded-xl" />
+    <Skeleton className="h-[90px] w-full rounded-xl" />
+  </div>;
   }
 
   return (

@@ -12,7 +12,7 @@ import { useUser } from "@clerk/nextjs";
 import { api } from "@/../convex/_generated/api";
 import { useQuery  } from 'convex/react';
 import toast from "react-hot-toast";
-
+import { Skeleton } from "./ui/skeleton";
 
 export const NavbarRoutes = () => {
   const pathname = usePathname();
@@ -22,12 +22,10 @@ export const NavbarRoutes = () => {
   const convexUser = useQuery(api.user.getUser);
 
   if (!convexUser) {
-    return <div>Loading...</div>; // Or handle this case however you like
+    return <div><Skeleton className="h-6 w-6 rounded-full" /></div>;
   }
 
   const isCreateArrticlePage = pathname?.startsWith('/article');
-  // const isCoursePage = pathname?.includes("/create");
-  const isSearchPage = pathname === "/search";
 
   const toProfile = (userId: string) => {
     router.push(`/profile/${userId}`)

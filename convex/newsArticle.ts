@@ -6,7 +6,6 @@ import { v } from "convex/values";
 import { paginationOptsValidator } from "convex/server";
 // import { Configuration, OpenAIApi } from "openai";
 import { httpAction } from "./_generated/server.js";
-const YOUR_API_KEY = process.env.NEXT_PUBLIC_SUMMERIZE_AI!;  
 
 
 export const getArticle = query({
