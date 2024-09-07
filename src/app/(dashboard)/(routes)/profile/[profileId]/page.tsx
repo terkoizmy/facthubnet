@@ -25,6 +25,7 @@ import { Textarea } from "@/components/ui/textarea"
 
 import {  useParams } from 'next/navigation';
 import { useState } from "react";
+import { Id } from "@/../convex/_generated/dataModel";
 
 
 function formatTimestamp(timestamp: any) {
@@ -37,6 +38,7 @@ function formatTimestamp(timestamp: any) {
 export default function ProfilePage () {
   const { user } = useUser()
   const { profileId } = useParams() 
+  
 
   if (!user) {
     return <div>Loading...</div>; // Or handle this case however you like
@@ -45,6 +47,8 @@ export default function ProfilePage () {
   //@ts-ignore
   const userProfile = useQuery(api.profile.getUserProfile, { profileId: profileId })
   const updateUser = useMutation(api.user.editUser)
+  const toggleFollow = useMutation(api.follow.toogleFollow);
+  const isFollowed = useQuery(api.follow.isFollowed, { userId: userProfile?.user?._id as Id<"users"> });
 
   const [bio, setBio] = useState(userProfile?.user?.bio || "");
 
@@ -76,9 +80,6 @@ export default function ProfilePage () {
     } catch (error) {
       console.log(error)
     }
-
-
-    
   };
 
   return (
@@ -130,10 +131,21 @@ export default function ProfilePage () {
                 </div>
               }
             
-
+              { user.id === userProfile.user?.clerkId 
+              ? 
               <AlertDialogTrigger asChild>
                 <Button variant="outline"> <Plus /> Edit your bio</Button>
               </AlertDialogTrigger>
+              :
+                <div className="text-amber-500 hover:text-amber-700 hover:cursor-pointer" onClick={() => {toggleFollow({userId: userProfile.user?._id as Id<"users">})}}> 
+                  {isFollowed ? 
+                    <Button variant="outline">Following</Button>
+                    :
+                    <Button variant="outline">Follow</Button>
+                    }
+                </div>
+              }
+              
             </div>
 
             <div className="flex flex-col w-full h-full mt-7">

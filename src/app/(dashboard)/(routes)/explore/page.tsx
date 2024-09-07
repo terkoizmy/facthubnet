@@ -29,7 +29,7 @@ export default function ExplorePage() {
   return (
     <div className="w-full max-w-3xl mx-auto">
       <div className='w-full flex justify-center mt-3 text-5xl font-semibold'>
-        Explore the world
+        Explore the words
       </div>
       <div className="relative mt-3">
         <Input

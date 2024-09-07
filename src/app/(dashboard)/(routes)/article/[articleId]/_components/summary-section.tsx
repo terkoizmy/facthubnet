@@ -18,7 +18,6 @@ export default function SummarySection({ article } : ArticleSectionProps) {
   const [summary, setSummary] = useState("")
   const generateSummary = useAction(api.newsArticle.generateAndStoreSummary);
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState(null);
   const [timer, setTimer] = useState(0);
 
   if (!article) return null;

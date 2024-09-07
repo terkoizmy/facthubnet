@@ -26,7 +26,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-
+import { Loader2 } from "lucide-react";
 import { useMutation, useQuery } from "convex/react"
 import { api } from "@/../../convex/_generated/api"
 import toast from "react-hot-toast"
@@ -82,6 +82,7 @@ export default function CreateNews({ userId }: any) {
   const [editorContent, setEditorContent] = useState({ text: "", html: "" })
   const [imagePreview, setImagePreview] = useState<string | null>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
+  const [isLoading, setIsLoading] = useState(false);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -125,9 +126,8 @@ export default function CreateNews({ userId }: any) {
   }
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    console.log("Saving content:", values)
-
     try {
+      setIsLoading(true);
       const convexUser = await getUserConvex({ clerkId: userId })
       if (!convexUser) {
         throw new Error("User not found in Convex database")
@@ -172,8 +172,6 @@ export default function CreateNews({ userId }: any) {
         id: toastId,
       })
 
-      console.log("Upload berhasil")
-
       const newArticle = await createNewsArticle({
         title: values.title,
         content: values.content.text,
@@ -188,13 +186,12 @@ export default function CreateNews({ userId }: any) {
       toast.success("Successfully Created News Article", {
         id: toastId,
       })
-
-      console.log(newArticle)
-
+      setIsLoading(false);
       router.push(`/article/${newArticle}`)
 
       // Reset form or navigate to another page
     } catch (err) {
+      setIsLoading(false);
       console.error("Error posting news:", err)
       toast.remove()
       toast.error("Error creating news article")
@@ -374,7 +371,14 @@ export default function CreateNews({ userId }: any) {
             )}
           />
 
-          <Button type="submit">Post</Button>
+          <Button type="submit">
+            {isLoading ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                Submiting
+              </>
+            ) : 'Post'}
+          </Button>
         </form>
       </Form>
     </div>

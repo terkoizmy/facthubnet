@@ -11,7 +11,7 @@ import { SearchInput } from "./search-input";
 import { useUser } from "@clerk/nextjs";
 import { api } from "@/../convex/_generated/api";
 import { useQuery  } from 'convex/react';
-import toast, { Toaster } from "react-hot-toast";
+import toast from "react-hot-toast";
 
 
 export const NavbarRoutes = () => {

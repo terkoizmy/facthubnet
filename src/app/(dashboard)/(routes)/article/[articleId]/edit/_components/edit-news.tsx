@@ -31,11 +31,12 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-
+import { Loader2 } from "lucide-react";
 import { useMutation, useQuery  } from 'convex/react';
 import { api } from '@/../../convex/_generated/api';
 import toast from "react-hot-toast";
 import { Doc, Id } from "@/../convex/_generated/dataModel";
+
 
 const MdEditor = dynamic(() => import('react-markdown-editor-lite'), {
   ssr: false,
@@ -59,7 +60,7 @@ const formSchema = z.object({
     text: z.string().min(1, "Content is required"),
     html: z.string(),
   }),
-  tags: z.array(z.string().max(10)).min(1, "At least one tag is required"),
+  tags: z.array(z.string().max(118)).min(1, "At least one tag is required"),
   categoryId: z.string().min(1, "Category is required"),
   image: z
     .optional( // Make the image field optional
@@ -79,13 +80,12 @@ interface editNewsProps {
 }
 
 export default function EditNews({ userId, article }: editNewsProps) {
-  console.log(article)
   const router = useRouter()
   const [tags, setTags] = useState<string[]>(article.tags || []);
   const [editorContent, setEditorContent] = useState({ text: article.content, html: article.htmlContent });
   const [imagePreview, setImagePreview] = useState<string | null>(null);
-  const fileInputRef = useRef<HTMLInputElement>(null);
-  const [fileUrls, setFileUrls] = useState("")
+  const [isLoading, setIsLoading] = useState(false);
+  console.log(tags)
   
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -147,15 +147,14 @@ export default function EditNews({ userId, article }: editNewsProps) {
   }
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    // console.log('Saving content:', values);
-    
+    setIsLoading(true);
     try {
       const toastId = toast.loading('Loading...');
       let fileUrls = ""
       
       if (!values.image){
         fileUrls = article.thumbnailUrl
-      }else{
+      } else {
 
         // Upload image
         const file = values.image[0];
@@ -223,18 +222,16 @@ export default function EditNews({ userId, article }: editNewsProps) {
           tags: values.tags,
           categoryId: values.categoryId as Id<"categories">,
         }
-        
       });
   
-      console.log('News article edited successfully!');
       toast.success('Successfully Edit News Article', {
         id: toastId,
       });
+      setIsLoading(false);
 
       router.push(`/article/${article._id}`)
-      
-      // Reset form or navigate to another page
     } catch (err) {
+      setIsLoading(false);
       console.error('Error posting news:', err);
       toast.remove();
       toast.error('Error editing news article')
@@ -403,9 +400,16 @@ export default function EditNews({ userId, article }: editNewsProps) {
           />
           
           <div className="flex justify-between">
-            <Button type="submit">Update</Button>
+            <Button disabled={isLoading} type="submit">
+              {isLoading ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Submiting
+                </>
+              ) : 'Update'}
+            </Button>
             <DialogTrigger asChild>
-              <Button variant="destructive">Delete</Button>
+              <Button disabled={isLoading} variant="destructive">Delete</Button>
             </DialogTrigger>
           </div>
         </form>
