@@ -3,8 +3,6 @@
 import CreateNews from "./_components/create-news";
 import { useUser, useAuth } from "@clerk/clerk-react";
 import { useRouter } from "next/navigation";
-import { useMutation } from "convex/react";
-import { api } from '@/../../convex/_generated/api';
 import { useEffect } from "react";
 
 export default function CreatePost() {

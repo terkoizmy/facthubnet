@@ -184,7 +184,7 @@ export const getArticleWithAuthor = query({
     const article = await db.get(articleId);
 
     if (!article) {
-      return { article: null };
+      return {data: null};
     }
     const author = await db.get(article.authorId);
     return {

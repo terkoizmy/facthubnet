@@ -11,7 +11,7 @@ import { Doc } from "@/../convex/_generated/dataModel";
 import { Button } from "@/components/ui/button";
 import { useUser } from "@clerk/clerk-react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { ThumbsUp,ThumbsDown, MessageSquare, Bookmark, BookmarkCheck } from "lucide-react";
 import { useMutation, useQuery } from "convex/react";
 import { api } from "@/../convex/_generated/api";
@@ -36,6 +36,7 @@ function formatTimestamp(timestamp: any) {
 }
 
 export default function ArticleSection( { article } : ArticleSectionProps)  {
+
   const { user } = useUser()
   const pathname = usePathname()
   const upvote = useMutation(api.votes.upvote);

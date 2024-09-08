@@ -1,10 +1,9 @@
 "use client";
 import { api } from "@/../convex/_generated/api";
-import { useAction, useMutation, useQuery } from "convex/react"
-import { useParams } from 'next/navigation'
+import { useQuery } from "convex/react"
+import { useParams, useRouter } from 'next/navigation'
 import { Skeleton } from "@/components/ui/skeleton";
 import { Doc } from "@/../convex/_generated/dataModel";
-import { Button } from "@/components/ui/button";
 import ArticleSection from "./_components/article-section";
 import CommentSection from "./_components/comment-section";
 import SummarySection from "./_components/summary-section";

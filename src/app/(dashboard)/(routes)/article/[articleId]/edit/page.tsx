@@ -21,8 +21,7 @@ export default function EditArticle()  {
 
   // @ts-ignore
   if ( author?._id !== getArticle?.authorId){
-    toast.error('This is not your article');
-    router.push(`/article/${articleId}`)
+    router.push(`/`)
   }
 
   return (

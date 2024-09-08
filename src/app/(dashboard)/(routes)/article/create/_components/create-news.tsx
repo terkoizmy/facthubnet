@@ -181,13 +181,11 @@ export default function CreateNews({ userId }: any) {
         tags: values.tags,
         categoryId: values.category as Id<"categories">,
       })
-
-      console.log("News article posted successfully!")
+      router.push(`/article/${newArticle}`)
       toast.success("Successfully Created News Article", {
         id: toastId,
       })
-      router.push(`/article/${newArticle}`)
-      setIsLoading(false);
+      
 
       // Reset form or navigate to another page
     } catch (err) {

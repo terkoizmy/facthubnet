@@ -136,13 +136,13 @@ export default function EditNews({ userId, article }: editNewsProps) {
         clerkId: userId,
         authorId: article.authorId,
       })
-
+      router.push(`/`)
       toast.success('Successfully delete news article', {
         id: toastId,
       });
-      router.push(`/`)
-    } catch (error) {
       
+    } catch (error) {
+      console.log(error)
     }
   }
 
@@ -227,7 +227,6 @@ export default function EditNews({ userId, article }: editNewsProps) {
         id: toastId,
       });
       router.push(`/article/${article._id}`)
-      setIsLoading(false);
     } catch (err) {
       setIsLoading(false);
       console.error('Error posting news:', err);
