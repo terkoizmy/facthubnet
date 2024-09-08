@@ -197,7 +197,6 @@ export const getArticleWithAuthor = query({
 export const editArticle = mutation({
   args: {
     articleId: v.id("newsArticles"),
-    clerkId: v.string(),
     // @ts-ignore
     articleData: v.object({
       title: v.string(),
@@ -211,12 +210,16 @@ export const editArticle = mutation({
   },
   handler: async (ctx, args) => {
     const { db } = ctx
-    const { articleId, clerkId, articleData } = args
+    const { articleId, articleData } = args
 
-    const checkUser = await db
-    .query("users")
-    .filter((q) => q.eq(q.field("clerkId"), clerkId))
-    .unique();
+    const identity = await ctx.auth.getUserIdentity();
+    if (!identity) {
+      return false;
+    }
+    const checkUser = await ctx.db
+      .query("users")
+      .filter((q) => q.eq(q.field("clerkId"), identity.subject))
+      .unique();
 
     if(checkUser?._id != articleData.authorId){
       throw new Error("You are not the author on this article");

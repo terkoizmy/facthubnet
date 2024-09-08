@@ -11,12 +11,11 @@ export const createUser = mutation({
     imageUrl: v.string(),
   },
   handler: async (ctx, args) => {
-    const { clerkId, email, name } = args;
 
     // Check if user already exists
     const existingUser = await ctx.db
       .query("users")
-      .filter((q) => q.eq(q.field("clerkId"), clerkId))
+      .filter((q) => q.eq(q.field("clerkId"), args.clerkId))
       .first();
 
     if (existingUser) {
@@ -55,45 +54,20 @@ export const getUser =  query({
 });
 
 export const getUserConvex =  mutation({
-  args: { clerkId: v.optional(v.string()) },
   handler: async (ctx, args) => {
-    if (!args.clerkId) return null;
+    
+    const identity = await ctx.auth.getUserIdentity();
+    if (!identity) return null;
     const user = await ctx.db
       .query("users")
-      .filter((q) => q.eq(q.field("clerkId"), args.clerkId))
+      .filter((q) => q.eq(q.field("clerkId"), identity.subject))
       .unique();
     return user;
   },
 });
 
-export const getProfile  =  query({
-  args: { clerkId: v.optional(v.string()) },
-  handler: async (ctx, args) => {
-    if (!args.clerkId) return null;
-    const user = await ctx.db
-      .query("users")
-      .filter((q) => q.eq(q.field("clerkId"), args.clerkId))
-      .first();
-
-    if (!user) {
-      throw new Error("User not found in Convex database");
-    }
-
-    const article = await ctx.db
-    .query("newsArticles")
-    .filter((q) => q.eq(q.field("authorId"), user._id))
-    .collect()
-
-    return {
-      user,
-      article,
-    };
-  },
-});
-
 export const editUser = mutation({
   args: {
-    clerkId: v.string(),
     userCurrentData: v.object({
       clerkId: v.string(),
       name: v.string(),
@@ -104,16 +78,19 @@ export const editUser = mutation({
     })
   },
   handler: async (ctx, args) => {
-    const { userCurrentData, clerkId } = args;
+    const { userCurrentData } = args;
     const { db } = ctx;
 
-    if(clerkId != userCurrentData.clerkId){
+    const identity = await ctx.auth.getUserIdentity();
+    if (!identity) return null;
+
+    if(identity.subject != userCurrentData.clerkId){
       throw new Error("You are not the user on this profile");
     }
 
     const checkUser = await db
     .query("users")
-    .filter((q) => q.eq(q.field("clerkId"), clerkId))
+    .filter((q) => q.eq(q.field("clerkId"), identity.subject))
     .unique();
 
     if(!checkUser){

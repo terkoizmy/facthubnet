@@ -2,15 +2,17 @@ import { query, mutation } from "./_generated/server";
 import { v } from "convex/values";
 
 export const getRecommendations = query({
-  args: { clerkId: v.string(), limit: v.optional(v.number()) },
+  args: {  limit: v.optional(v.number()) },
   handler: async (ctx, args) => {
-    const { clerkId, limit = 5 } = args;
+    const {  limit = 5 } = args;
     const { db } = ctx
 
     // Get user from Clerk ID
+    const identity = await ctx.auth.getUserIdentity();
+    if (!identity) return null;
     const user = await ctx.db
       .query("users")
-      .filter((q) => q.eq(q.field("clerkId"), clerkId))
+      .filter((q) => q.eq(q.field("clerkId"), identity.subject))
       .first();
 
     if (!user) {
@@ -39,8 +41,6 @@ export const getRecommendations = query({
       .map(([categoryId]) => categoryId)
       .slice(0, 3); // Top 3 categories
 
-    console.log(sortedCategories)
-
     // Get recent articles from top categories
     const recommendedArticles = await ctx.db
     .query("newsArticles")
@@ -53,8 +53,6 @@ export const getRecommendations = query({
     )
     .order("desc")
     .take(limit);
-
-    console.log(recommendedArticles)
 
     // Fetch author information for each article
     const articlesWithAuthors = await Promise.all(
@@ -76,17 +74,19 @@ export const getRecommendations = query({
 
 export const trackInteraction = mutation({
   args: { 
-    clerkId: v.string(),
     articleId: v.id("newsArticles"),
     interactionType: v.string(),
   },
   handler: async (ctx, args) => {
-    const { clerkId, articleId, interactionType } = args;
-    
+    const { articleId, interactionType } = args;
+    const identity = await ctx.auth.getUserIdentity();
+    if (!identity) {
+      return false;
+    }
     // Get user from Clerk ID
     const user = await ctx.db
       .query("users")
-      .filter((q) => q.eq(q.field("clerkId"), clerkId))
+      .filter((q) => q.eq(q.field("clerkId"), identity.subject))
       .first();
 
     if (!user) {

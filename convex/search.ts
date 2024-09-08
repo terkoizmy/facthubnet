@@ -73,3 +73,32 @@ export const exploreArticles = query({
     return processedArticles;
   },
 });
+
+export const getTrendingTopics = query({
+  handler: async (ctx) => {
+    // Fetch the most recent articles
+    const recentArticles = await ctx.db
+      .query("newsArticles")
+      .order("desc")
+      .take(20);
+
+    // Count occurrences of each tag
+    const tagCounts: { [key: string]: number } = {};
+    recentArticles.forEach(article => {
+      article.tags.forEach(tag => {
+        tagCounts[tag] = (tagCounts[tag] || 0) + 1;
+      });
+    });
+
+    // Sort tags by count and take top 6
+    const trendingTopics = Object.entries(tagCounts)
+      .sort(([, a], [, b]) => b - a)
+      .slice(0, 6)
+      .map(([tag, count]) => ({
+        title: tag,
+        description: `${count} recent article${count > 1 ? 's' : ''}`
+      }));
+
+    return trendingTopics;
+  },
+});

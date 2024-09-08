@@ -204,7 +204,7 @@ export default function EditNews({ userId, article }: editNewsProps) {
         id: toastId,
       });
 
-      const convexUser = await getUserConvex({ clerkId: userId });
+      const convexUser = await getUserConvex({});
       
       if (!convexUser) {
         throw new Error("User not found in Convex database");
@@ -212,7 +212,6 @@ export default function EditNews({ userId, article }: editNewsProps) {
       
       await updateNewsArticle({
         articleId: article._id,
-        clerkId: userId,
         articleData: {
           title: values.title,
           content: values.content.text,

@@ -52,10 +52,6 @@ export default defineSchema({
     userId: v.id("users"),
     voteType: v.union(v.literal("upvote"), v.literal("downvote")),
   }),
-  images: defineTable({
-    storageId: v.string(),
-    prompt: v.string(),
-  }),
   follows: defineTable({
     followerId: v.id("users"), 
     followedId: v.id("users"), 

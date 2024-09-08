@@ -26,14 +26,3 @@ export const generateAndStore = action({
     return storageId
   },
 });
-
-export const storeResult = internalMutation({
-  args: {
-    storageId: v.id("_storage"),
-    prompt: v.string(),
-  },
-  handler: async (ctx, args) => {
-    const { storageId, prompt } = args;
-    await ctx.db.insert("images", { storageId, prompt });
-  },
-});

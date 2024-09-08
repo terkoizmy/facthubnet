@@ -48,14 +48,14 @@ export const NewsCard = ({ article }: CardNewsProps) => {
   const handleUpvote = async (articleId: any) => {
     if (user) {
       await upvote({ articleId })
-      await trackInteraction({ clerkId: user.id, articleId, interactionType: "upvote" })
+      await trackInteraction({ articleId, interactionType: "upvote" })
     }
   }
 
   const handleDownvote = async (articleId: any) => {
     if (user) {
       await downvote({ articleId })
-      await trackInteraction({ clerkId: user.id, articleId, interactionType: "downvote" })
+      await trackInteraction({ articleId, interactionType: "downvote" })
     }
   }
 
@@ -64,13 +64,13 @@ export const NewsCard = ({ article }: CardNewsProps) => {
       setOptimisticBookmark((prev) => !prev)
       const result = await toggleBookmark({ articleId })
       setOptimisticBookmark(result)
-      await trackInteraction({ clerkId: user.id, articleId, interactionType: "bookmark" })
+      await trackInteraction({ articleId, interactionType: "bookmark" })
     }
   }
 
   useEffect(() => {
     if (user) {
-      trackInteraction({ clerkId: user.id, articleId: article._id, interactionType: "view" })
+      trackInteraction({ articleId: article._id, interactionType: "view" })
     }
   }, [user, article._id, trackInteraction])
 

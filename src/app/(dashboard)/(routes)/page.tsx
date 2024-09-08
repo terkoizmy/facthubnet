@@ -22,7 +22,7 @@ export default function Home() {
   );
 
   const recommendations = useQuery(api.recommendations.getRecommendations, 
-    user ? { clerkId: user.id, limit: 5 } : "skip"
+    user ? { limit: 5 } : "skip"
   );
 
   useEffect(() => {
