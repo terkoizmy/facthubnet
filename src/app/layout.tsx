@@ -1,5 +1,4 @@
 "use client"
-
 import { Inter } from "next/font/google"
 import "./globals.css"
 import { ClerkProvider, useAuth } from "@clerk/clerk-react"
@@ -26,6 +25,12 @@ export default function RootLayout({
     >
       <ConvexProviderWithClerk client={convex} useAuth={useAuth}>
         <html lang="en">
+        <head>
+          <meta property="og:title" content="NewsCenter.net" />
+          <meta property="og:description" content="Your AI-powered news hub for efficient, reliable information consumption." />
+          <meta property="og:image" content="https://newscenter-net.netlify.app/logo.png" />
+          <meta property="og:url" content="https://newscenter-net.netlify.app/" />
+        </head>
           <body className={inter.className}>
             <ThemeProvider
               attribute="class"
