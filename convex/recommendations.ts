@@ -2,17 +2,15 @@ import { query, mutation } from "./_generated/server";
 import { v } from "convex/values";
 
 export const getRecommendations = query({
-  args: {  limit: v.optional(v.number()) },
+  args: { clerkId: v.string(), limit: v.optional(v.number()) },
   handler: async (ctx, args) => {
-    const {  limit = 5 } = args;
+    const { clerkId, limit = 5 } = args;
     const { db } = ctx
 
     // Get user from Clerk ID
-    const identity = await ctx.auth.getUserIdentity();
-    if (!identity) return null;
     const user = await ctx.db
       .query("users")
-      .filter((q) => q.eq(q.field("clerkId"), identity.subject))
+      .filter((q) => q.eq(q.field("clerkId"), clerkId))
       .first();
 
     if (!user) {
