@@ -62,7 +62,6 @@ export default function ProfilePage () {
       // For now, let's just update the local state
 
       await updateUser({
-        clerkId: clerkId,
         userCurrentData: {
           clerkId: userData.clerkId,
           name: userData.name,

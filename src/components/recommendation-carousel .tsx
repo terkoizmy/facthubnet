@@ -19,7 +19,7 @@ export const RecommendationCarousel = ({ articles }: RecommendationCarouselProps
       <Carousel className="relative">
         <CarouselContent>
           {articles.map((article) => (
-            <CarouselItem key={article._id} className="md:basis-1/2 lg:basis-1/3 xl:basis-1/4 2xl:basis-1/5 3xl:basis-1/6">
+            <CarouselItem key={article._id} className="md:basis-1/2 lg:basis-1/3 xl:basis-1/4">
               <NewsCard article={article} />
             </CarouselItem>
           ))}

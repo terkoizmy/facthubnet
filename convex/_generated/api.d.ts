@@ -19,7 +19,6 @@ import type * as category from "../category.js";
 import type * as clerkWebhook from "../clerkWebhook.js";
 import type * as comments from "../comments.js";
 import type * as follow from "../follow.js";
-import type * as http from "../http.js";
 import type * as images from "../images.js";
 import type * as newsArticle from "../newsArticle.js";
 import type * as profile from "../profile.js";
@@ -43,7 +42,6 @@ declare const fullApi: ApiFromModules<{
   clerkWebhook: typeof clerkWebhook;
   comments: typeof comments;
   follow: typeof follow;
-  http: typeof http;
   images: typeof images;
   newsArticle: typeof newsArticle;
   profile: typeof profile;
