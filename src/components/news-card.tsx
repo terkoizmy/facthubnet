@@ -4,7 +4,7 @@ import { useState, useEffect } from "react"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
-import { Doc } from "@/../convex/_generated/dataModel"
+import { Doc, Id } from "@/../convex/_generated/dataModel"
 import {
   ThumbsUp,
   ThumbsDown,
@@ -20,12 +20,11 @@ import {
   CardContent,
   CardFooter,
   CardHeader,
-  CardTitle,
 } from "@/components/ui/card"
-import { BookmarkPlus, ExternalLink } from "lucide-react"
 import Link from "next/link"
 import Image from "next/image"
 import { Badge } from "./ui/badge"
+import { useRouter } from "next/navigation"
 
 interface CardNewsProps {
   article: Doc<"newsArticles"> & {
@@ -36,6 +35,7 @@ interface CardNewsProps {
 
 export const NewsCard = ({ article }: CardNewsProps) => {
   const { user } = useUser();
+  const router = useRouter()
   const upvote = useMutation(api.votes.upvote)
   const downvote = useMutation(api.votes.downvote)
   const toggleBookmark = useMutation(api.bookmarks.toggleBookmark)
@@ -68,11 +68,9 @@ export const NewsCard = ({ article }: CardNewsProps) => {
     }
   }
 
-  useEffect(() => {
-    if (user) {
-      trackInteraction({ articleId: article._id, interactionType: "view" })
-    }
-  }, [user, article._id, trackInteraction])
+  const toArticle = async (articleId: any ) => {
+    await trackInteraction({ articleId, interactionType: "view" })
+  }
 
   return (
     <>
@@ -99,6 +97,7 @@ export const NewsCard = ({ article }: CardNewsProps) => {
           </div>
         </CardHeader>
         <Link
+          onClick={() => {toArticle(article._id)}}
           href={`/article/${article._id}`}
           target="_blank"
           className="hover:border-black dark:hover:border-gray-600 hover:cursor-pointer"
@@ -124,6 +123,7 @@ export const NewsCard = ({ article }: CardNewsProps) => {
         </Link>
         <CardFooter className="px-0 flex flex-col mx-2 py-0 my-2">
           <Link
+            onClick={() => {toArticle(article._id)}}
             href={`/article/${article._id}`}
             target="_blank"
             className="hover:border-black dark:hover:border-gray-600 hover:cursor-pointer"

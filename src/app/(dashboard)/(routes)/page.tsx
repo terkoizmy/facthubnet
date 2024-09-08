@@ -43,7 +43,6 @@ export default function Home() {
 
   return (
     <main className="flex w-full flex-col" >
-
       {recommendations && recommendations.length > 0 && (
         // @ts-ignore
         <RecommendationCarousel articles={recommendations} />
